@@ -1,12 +1,11 @@
 const express = require('express')
 const app = express()
-const port = 3000
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-const cokieParser = require('cookie-parser')
-app.use(cokieParser())
+const cookieParser = require('cookie-parser')
+app.use(cookieParser())
 
 const {auth} = require('./middleware/auth')
 
@@ -14,14 +13,19 @@ const {User} = require('./models/User')
 const config = require('./config/key')
 
 const mongoose = require('mongoose')
-const cookieParser = require('cookie-parser')
 
 mongoose.connect(config.mongoURI, {
     useNewUrlParser:true, useUnifiedTopology:true, useCreateIndex:true, useFindAndModify:false
-}).then(() => console.log('MongoDB Connecte .. '))
+}).then(() => console.log('MongoDB Connect .. '))
   .catch(err => console.log('err'))
 
 app.get('/', (req, res) => res.send('Hello World!!!!!!!'))
+
+app.get('/api/hello', (req, res)=>{
+
+
+  res.send("Hello")
+})
 
 app.post('/api/user/register', (req, res) =>{
   // 회원 가입 시 필요한 정보를 db에 넣는다.
@@ -76,6 +80,7 @@ app.get('/api/user/logout', auth, (req, res) => {
   })
 })
 
+const port = 5000
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
